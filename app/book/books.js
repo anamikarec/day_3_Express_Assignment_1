@@ -58,10 +58,16 @@ router.patch('/:bookid',(req, res) => {
       res.status(400).send(`Invalid request: ${err.toString()}`)
     }
 })
-router.delete('/bookid',(req, res) => {
-    const book = Book.find(book => {
-        return (Number(book.id) === Number(req.params.bookid));
-     });
-     delete book;
+
+router.delete('/:bookid',(req, res) => {
+    try{
+        const book = Book.filter(book => {
+            return Number(book.id) !== Number(req.params.bookid);
+         });
+        res.status(201).json(book);
+    }
+    catch(err) {
+        res.status(400).send(`Invalid request: ${err.toString()}`)
+    }
 })
 module.exports = router;
