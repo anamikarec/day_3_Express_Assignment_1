@@ -41,4 +41,27 @@ router.post("/",(req,res)=>{
     }
 })
 
+router.patch('/:bookid',(req, res) => {
+    try{
+        const book = Book.find(book => {
+            return (Number(book.id) === Number(req.params.bookid));
+         });
+        const {author,published_year}=req.body;
+        if(!author || author=="") throw new Error('Author name is required');
+        if(!published_year || published_year=="") throw new Error('published_year is required');
+        book.author = author;
+        book.published_year = published_year;
+        Book.push(book);
+        res.status(201).json(book);
+    }
+    catch(err){
+      res.status(400).send(`Invalid request: ${err.toString()}`)
+    }
+})
+router.delete('/bookid',(req, res) => {
+    const book = Book.find(book => {
+        return (Number(book.id) === Number(req.params.bookid));
+     });
+     delete book;
+})
 module.exports = router;
